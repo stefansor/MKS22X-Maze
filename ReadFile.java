@@ -16,7 +16,7 @@ public class ReadFile {
         while(inf.hasNextLine()){
             numlines++;
             String line = inf.nextLine();
-            System.out.println(line);//hopefully you can do other things with the line
+            System.out.println(line);
             lengthline = line.length();
         }
         System.out.println(numlines);
