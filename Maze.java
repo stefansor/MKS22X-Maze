@@ -84,7 +84,7 @@ public class Maze{
           if(maze[i][j] == 'S'){
             Srow = i;                   //finds S and erases it
             Scol = j;
-            maze[i][j] = ' ';
+            maze[i][j] = '@';
           }
         }
       }
@@ -119,7 +119,17 @@ public class Maze{
 
             wait(20);
         }
-
+        if(maze[row][col] == 'E'){
+          int yea = 0;
+          for(int i = 0; i < maze.length; i++){
+            for(int j = 0; j < maze[0].length; j++){
+              if(maze[i][j] == '@'){
+                yea++;
+              }
+            }
+          }
+          return yea;
+        }
         //COMPLETE SOLVE
 
         return -1; //so it compiles
