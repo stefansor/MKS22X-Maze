@@ -8,8 +8,8 @@ public class Maze{
     private int rowlastmove;
     private int collastmove;
     private int[][] moves = new int[][]{
-      {1, 0},
       {-1, 0},
+      {1, 0},
       {0, -1},
       {0, 1}
     };
@@ -110,7 +110,7 @@ public class Maze{
       }
       return false;
     }
-    private boolean around(int row, int col){
+    private boolean atExists(int row, int col){
       if(maze[row - 1][col] == '@'
       || maze[row + 1][col] == '@'
       || maze[row][col + 1] == '@'
@@ -182,7 +182,7 @@ public class Maze{
             }
           }
         }
-        else if(around(row, col)){
+        else if(atExists(row, col)){
           maze[row][col] = '.';
           return solve(row + rowlastmove, col + collastmove);
         }
