@@ -5,11 +5,21 @@ public class Maze{
 
     private char[][]maze;
     private boolean animate;//false by default
+    private int rowlastmove;
+    private int collastmove;
+    private int[][] moves = new int[][]{
+      {0, -1},
+      {0, 1},
+      {1, 0},
+      {-1, 0}
+    };
 
 
     public Maze(String filename){
       try{
         animate = false;
+        rowlastmove = 0;
+        collastmove = 0;
         File text = new File(filename);
         Scanner inf = new Scanner(text);
         int rows = 0;
@@ -74,11 +84,10 @@ public class Maze{
 
       Note the helper function has the same name, but different parameters.
       Since the constructor exits when the file is not found or is missing an E or S, we can assume it exists.
-
     */
     public int solve(){
-      int Srow;
-      int Scol;
+      int Srow = 0;
+      int Scol = 0;
       for(int i = 0; i < maze.length; i++){
         for(int j = 0; j < maze[0].length; j++){
           if(maze[i][j] == 'S'){
@@ -89,6 +98,35 @@ public class Maze{
         }
       }
       return solve(Srow, Scol);
+    }
+
+
+
+
+
+    private boolean validMove(int row, int col){
+      if(maze[row][col] == ' '){
+        return true;
+      }
+      return false;
+    }
+    private boolean around(int row, int col){
+      if(maze[row - 1][col] == '@'
+      || maze[row + 1][col] == '@'
+      || maze[row][col + 1] == '@'
+      || maze[row][col - 1] == '@'){
+        return true;
+      }
+      return false;
+    }
+    private boolean canMove(int row, int col){
+      if(maze[row - 1][col] == ' '
+      || maze[row + 1][col] == ' '
+      || maze[row][col + 1] == ' '
+      || maze[row][col - 1] == ' '){
+        return true;
+      }
+      return false;
     }
 
     /*
@@ -130,6 +168,21 @@ public class Maze{
           }
           return yea;
         }
+        if(canMove(row, col)){
+          for(int i = 0; i < moves.length; i++){
+            if(validMove(row + moves[i][0], col + moves[i][1])){
+              maze[row][col] = '@';
+              rowlastmove = moves[i][0];
+              collastmove = moves[i][1];
+              return solve(row + moves[i][0], col + moves[i][1]);
+            }
+          }
+        }
+        if(around(row, col)){
+          maze[row][col] = '.';
+          return solve(row + rowlastmove, col + collastmove);
+        }
+
         //COMPLETE SOLVE
 
         return -1; //so it compiles
@@ -143,7 +196,12 @@ public class Maze{
 
 
     public static void main(String[] args){
-      Maze one = new Maze("Hm.txt");
+      Maze one = new Maze("Maze1.txt");
+      System.out.println(one);
+      String n = "";
+      n += 'j';
+      System.out.println(n);
+      one.solve();
       System.out.println(one);
     }
 
