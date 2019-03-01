@@ -8,10 +8,10 @@ public class Maze{
     private int rowlastmove;
     private int collastmove;
     private int[][] moves = new int[][]{
-      {0, -1},
-      {0, 1},
       {1, 0},
-      {-1, 0}
+      {-1, 0},
+      {0, -1},
+      {0, 1}
     };
 
 
@@ -93,7 +93,7 @@ public class Maze{
           if(maze[i][j] == 'S'){
             Srow = i;                   //finds S and erases it
             Scol = j;
-            maze[i][j] = '@';
+            maze[i][j] = ' ';
           }
         }
       }
@@ -168,17 +168,21 @@ public class Maze{
           }
           return yea;
         }
-        if(canMove(row, col)){
-          for(int i = 0; i < moves.length; i++){
-            if(validMove(row + moves[i][0], col + moves[i][1])){
-              maze[row][col] = '@';
-              rowlastmove = moves[i][0];
-              collastmove = moves[i][1];
-              return solve(row + moves[i][0], col + moves[i][1]);
+        if(validMove(row, col)){
+          if(canMove(row, col)){
+            for(int i = 0; i < moves.length; i++){
+              if(validMove(row + moves[i][0], col + moves[i][1])){
+                maze[row][col] = '@';
+                rowlastmove = moves[i][0] * -1;
+                collastmove = moves[i][1] * -1;
+                System.out.println(rowlastmove);
+                System.out.println(collastmove);
+                return solve(row + moves[i][0], col + moves[i][1]);
+              }
             }
           }
         }
-        if(around(row, col)){
+        else if(around(row, col)){
           maze[row][col] = '.';
           return solve(row + rowlastmove, col + collastmove);
         }
@@ -201,7 +205,7 @@ public class Maze{
       String n = "";
       n += 'j';
       System.out.println(n);
-      one.solve();
+      System.out.println(one.solve());
       System.out.println(one);
     }
 
