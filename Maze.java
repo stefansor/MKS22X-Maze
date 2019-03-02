@@ -5,8 +5,6 @@ public class Maze{
 
     private char[][]maze;
     private boolean animate;//false by default
-    private int rowlastmove;
-    private int collastmove;
     private int[][] moves = new int[][]{
       {-1, 0},
       {1, 0},
@@ -15,11 +13,8 @@ public class Maze{
     };
 
 
-    public Maze(String filename){
-      try{
+    public Maze(String filename) throws FileNotFoundException{
         animate = false;
-        rowlastmove = 0;
-        collastmove = 0;
         File text = new File(filename);
         Scanner inf = new Scanner(text);
         int rows = 0;
@@ -39,11 +34,6 @@ public class Maze{
             index++;
           }
         }
-      }
-      catch(FileNotFoundException e){
-        System.out.println("Must input a file that exists, your file was not found");
-        System.exit(1);
-      }
     }
 
 
@@ -111,14 +101,18 @@ public class Maze{
       return false;
     }
     private boolean atExists(int row, int col){
-      if(maze[row - 1][col] == '@'
-      || maze[row + 1][col] == '@'
-      || maze[row][col + 1] == '@'
-      || maze[row][col - 1] == '@'){
-        return true;
+      if(!canMove(row, col)){
+        if(maze[row - 1][col] == '@'
+        || maze[row + 1][col] == '@'
+        || maze[row][col + 1] == '@'
+        || maze[row][col - 1] == '@'){
+          return true;
+        }
       }
       return false;
     }
+
+
     private boolean canMove(int row, int col){
       if(maze[row - 1][col] == ' '
       || maze[row + 1][col] == ' '
@@ -147,7 +141,7 @@ public class Maze{
         All visited spots that are part of the solution are changed to '@'
     */
     private int solve(int row, int col){ //you can add more parameters since this is private
-      animate = true;
+      //animate = true;
 
         //automatic animation! You are welcome.
         if(animate){
@@ -155,9 +149,13 @@ public class Maze{
             clearTerminal();
             System.out.println(this);
 
-            wait(20);
+            wait(100);
 
-            if(maze[row][col] == 'E'){
+            if(maze[row - 1][col] == 'E'
+            || maze[row + 1][col] == 'E'
+            || maze[row][col - 1] == 'E'
+            || maze[row][col + 1] == 'E'){
+              maze[row][col] = '@';
               int yea = 0;
               for(int i = 0; i < maze.length; i++){
                 for(int j = 0; j < maze[0].length; j++){
@@ -169,43 +167,41 @@ public class Maze{
               return yea;
             }
             if(validMove(row, col)){
+              maze[row][col] = '@';
               for(int i = 0; i < moves.length; i++){
                 if(validMove(row + moves[i][0], col + moves[i][1])){
-                  maze[row][col] = '@';
-                  rowlastmove = moves[i][0];
-                  collastmove = moves[i][1];
-                  System.out.println(rowlastmove);
-                  System.out.println(collastmove);
                   return solve(row + moves[i][0], col + moves[i][1]);
                 }
               }
             }
-            else if(atExists(row, col)){
+            if(atExists(row, col)){
               maze[row][col] = '.';
-              return solve(row - rowlastmove, col - collastmove);
+              if(maze[row - 1][col] == '@'){
+                return solve(row - 1, col);
+              }
+              if(maze[row + 1][col] == '@'){
+                return solve(row + 1, col);
+              }
+              if(maze[row][col + 1] == '@'){
+                return solve(row, col + 1);
+              }
+              if(maze[row][col - 1] == '@'){
+                return solve(row, col - 1);
+              }
           }
-
+          else if(canMove(row, col) && maze[row][col] == '@'){
+            for(int i = 0; i < moves.length; i++){
+              if(validMove(row + moves[i][0], col + moves[i][1])){
+                return solve(row + moves[i][0], col + moves[i][1]);
+              }
+            }
+          }
+          return -1;
           //COMPLETE SOLVE
         }
         return -1; //so it compiles
     }
 
-
-
-
-
-
-
-
-    public static void main(String[] args){
-      Maze one = new Maze("Maze1.txt");
-      System.out.println(one);
-      String n = "";
-      n += 'j';
-      System.out.println(n);
-      System.out.println(one.solve());
-      System.out.println(one);
-    }
 
 
 
