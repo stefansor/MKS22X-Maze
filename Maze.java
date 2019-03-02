@@ -147,7 +147,7 @@ public class Maze{
         All visited spots that are part of the solution are changed to '@'
     */
     private int solve(int row, int col){ //you can add more parameters since this is private
-
+      animate = true;
 
         //automatic animation! You are welcome.
         if(animate){
@@ -156,39 +156,37 @@ public class Maze{
             System.out.println(this);
 
             wait(20);
-        }
-        if(maze[row][col] == 'E'){
-          int yea = 0;
-          for(int i = 0; i < maze.length; i++){
-            for(int j = 0; j < maze[0].length; j++){
-              if(maze[i][j] == '@'){
-                yea++;
+
+            if(maze[row][col] == 'E'){
+              int yea = 0;
+              for(int i = 0; i < maze.length; i++){
+                for(int j = 0; j < maze[0].length; j++){
+                  if(maze[i][j] == '@'){
+                    yea++;
+                  }
+                }
+              }
+              return yea;
+            }
+            if(validMove(row, col)){
+              for(int i = 0; i < moves.length; i++){
+                if(validMove(row + moves[i][0], col + moves[i][1])){
+                  maze[row][col] = '@';
+                  rowlastmove = moves[i][0];
+                  collastmove = moves[i][1];
+                  System.out.println(rowlastmove);
+                  System.out.println(collastmove);
+                  return solve(row + moves[i][0], col + moves[i][1]);
+                }
               }
             }
+            else if(atExists(row, col)){
+              maze[row][col] = '.';
+              return solve(row - rowlastmove, col - collastmove);
           }
-          return yea;
-        }
-        if(validMove(row, col)){
-          if(canMove(row, col)){
-            for(int i = 0; i < moves.length; i++){
-              if(validMove(row + moves[i][0], col + moves[i][1])){
-                maze[row][col] = '@';
-                rowlastmove = moves[i][0] * -1;
-                collastmove = moves[i][1] * -1;
-                System.out.println(rowlastmove);
-                System.out.println(collastmove);
-                return solve(row + moves[i][0], col + moves[i][1]);
-              }
-            }
-          }
-        }
-        else if(atExists(row, col)){
-          maze[row][col] = '.';
-          return solve(row + rowlastmove, col + collastmove);
-        }
 
-        //COMPLETE SOLVE
-
+          //COMPLETE SOLVE
+        }
         return -1; //so it compiles
     }
 
