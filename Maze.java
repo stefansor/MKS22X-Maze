@@ -140,13 +140,13 @@ public class Maze{
 
         All visited spots that are part of the solution are changed to '@'
     */
-    private int solve(int row, int col){ //you can add more parameters since this is private
+    private int solve(int row, int col){
+      int yea = 0; //you can add more parameters since this is private
             if(maze[row - 1][col] == 'E'
             || maze[row + 1][col] == 'E'
             || maze[row][col - 1] == 'E'
             || maze[row][col + 1] == 'E'){
               maze[row][col] = '@';
-              int yea = 0;
               for(int i = 0; i < maze.length; i++){
                 for(int j = 0; j < maze[0].length; j++){
                   if(maze[i][j] == '@'){
@@ -186,7 +186,7 @@ public class Maze{
               }
             }
           }
-        return -1; //so it compiles
+        return yea; //so it compiles
     }
 
 
