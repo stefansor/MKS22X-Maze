@@ -141,16 +141,6 @@ public class Maze{
         All visited spots that are part of the solution are changed to '@'
     */
     private int solve(int row, int col){ //you can add more parameters since this is private
-      //animate = true;
-
-        //automatic animation! You are welcome.
-        if(animate){
-
-            clearTerminal();
-            System.out.println(this);
-
-            wait(100);
-
             if(maze[row - 1][col] == 'E'
             || maze[row + 1][col] == 'E'
             || maze[row][col - 1] == 'E'
@@ -196,9 +186,6 @@ public class Maze{
               }
             }
           }
-          return -1;
-          //COMPLETE SOLVE
-        }
         return -1; //so it compiles
     }
 
